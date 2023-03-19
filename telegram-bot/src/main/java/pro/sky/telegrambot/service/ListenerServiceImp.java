@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.Person;
 
+import java.util.HashMap;
+
 @Service
 public class ListenerServiceImp implements ListenerService{
 
@@ -14,24 +16,28 @@ public class ListenerServiceImp implements ListenerService{
     @Autowired
     private PersonServiceImpl personService;
 
-    /**
-     * redirecting responses
-     **/
+    @Autowired
+    private AnswerImpl answer;
+
+
     @Override
     public SendMessage listener(Update update) {
         if (update.message().text().equals(START)) {
             return new SendMessage(update.message().chat().id(), checkPerson(update));
         }else{
-
+            return new SendMessage(update.message().chat().id(), answer.createTask(update));
         }
-        return null;
     }
 
-    /**
-     * Add a Person if missing
-     **/
+    @Override
+    public HashMap<Long, SendMessage> scheduledAnswer() {
+        return answer.scheduledAnswer();
+    }
+
+
+
     private String checkPerson(Update update) {
-        personService.addPerson(new Person(Math.toIntExact(update.message().from().id()),
+        personService.addPerson(new Person(update.message().from().id(),
                 update.message().from().firstName() + " " + update.message().from().lastName(),
                 update.message().from().username()));
 
@@ -39,4 +45,5 @@ public class ListenerServiceImp implements ListenerService{
                 " добро пожаловать в чат";
         return hello;
     }
+
 }

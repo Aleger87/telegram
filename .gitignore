@@ -1,1 +1,4 @@
 /telegram-bot/src/main/resources/application.properties
+/telegram-bot/target/
+/telegram-bot/telegram-bot.iml
+/.idea/
