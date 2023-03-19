@@ -12,8 +12,7 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique=true)
-    private  int userId;
+    private  Long userId;
 
     private  String name;
     private  String userName;
@@ -25,7 +24,7 @@ public class Person {
     private Set<NotificationTask> notifications;
 
 
-    public Person(int userId, String name, String userName) {
+    public Person(Long userId, String name, String userName) {
         this.userId = userId;
         this.name = name;
         this.userName = userName;
@@ -40,7 +39,7 @@ public class Person {
         return id;
     }
 
-    public int getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
