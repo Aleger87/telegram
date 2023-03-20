@@ -10,7 +10,4 @@ import pro.sky.telegrambot.model.Person;
 public interface PersonRepository extends JpaRepository<Person, Long> {
    @Query("select count (a.userId) from Person a where a.userId = :userId")
     int findByUserId(@Param("userId") Long userId);
-
-    @Query(value = "select * from person  where person.user_name  = :userName", nativeQuery = true)
-    Person findPersonByUserName(@Param("userName") String userName);
 }

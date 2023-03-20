@@ -71,12 +71,12 @@ public class NotificationTask {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NotificationTask that = (NotificationTask) o;
-        return Objects.equals(chatId, that.chatId);
+        return Objects.equals(id, that.id) && Objects.equals(chatId, that.chatId) && Objects.equals(message, that.message) && Objects.equals(dateTimeSendNotification, that.dateTimeSendNotification) && Objects.equals(person, that.person);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(chatId);
+        return Objects.hash(id, chatId, message, dateTimeSendNotification, person);
     }
 
     @Override

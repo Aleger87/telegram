@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.model.NotificationTask;
 import pro.sky.telegrambot.model.Person;
 import pro.sky.telegrambot.repository.NotificationTaskRepository;
+import pro.sky.telegrambot.repository.PersonRepository;
 
 
 import java.time.LocalDateTime;
@@ -25,7 +26,8 @@ public class AnswerImpl implements Answer {
     private final int DATE_LENGTH = 16;
 
     private Pattern pattern = Pattern.compile("([0-9\\.\\:\\s]{"+ DATE_LENGTH +"})(\\s)([\\W+]+)");
-    private Long chatId;
+    @Autowired
+    private PersonRepository personRepository;
 
 
     @Override
@@ -60,11 +62,7 @@ public class AnswerImpl implements Answer {
         String task = parseData(message, DATE_LENGTH +1);
         LocalDateTime dateTime = LocalDateTime.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
 
-        Person person = new Person(
-                update.message().from().id(),
-                update.message().from().firstName() + update.message().from().lastName(),
-                update.message().from().username()
-        );
+        Person person = parsePersonInfo(update);
 
         NotificationTask notificationTask = new NotificationTask(
                 update.message().chat().id(),
@@ -73,6 +71,11 @@ public class AnswerImpl implements Answer {
         );
         notificationTask.setPerson(person);
         notificationTaskRepository.save(notificationTask);
+    }
+
+    private Person parsePersonInfo(Update update) {
+        var info = update.message().from();
+        return new Person(info.id(), info.firstName() + " " + info.lastName(), info.username());
     }
 
     private boolean checkMessage(String s) {
