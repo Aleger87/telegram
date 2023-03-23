@@ -1,39 +1,44 @@
 package pro.sky.telegrambot.model;
 
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 public class NotificationTask {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(unique = true)
-    private int chatId;
+    private Long chatId;
 
     private String message;
     private LocalDateTime dateTimeSendNotification;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "person_id")
     private Person person;
 
+
     public NotificationTask() {
+
     }
 
-    public NotificationTask(int chatId, String message, Person person) {
+
+    public NotificationTask(Long chatId, String message, LocalDateTime dateTimeSendNotification) {
         this.chatId = chatId;
         this.message = message;
-        this.person = person;
+        this.dateTimeSendNotification = dateTimeSendNotification;
     }
 
-    public int getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public int getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 
@@ -53,17 +58,25 @@ public class NotificationTask {
         this.dateTimeSendNotification = dateTimeSendNotification;
     }
 
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         NotificationTask that = (NotificationTask) o;
-        return id == that.id && chatId == that.chatId;
+        return Objects.equals(id, that.id) && Objects.equals(chatId, that.chatId) && Objects.equals(message, that.message) && Objects.equals(dateTimeSendNotification, that.dateTimeSendNotification) && Objects.equals(person, that.person);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, chatId);
+        return Objects.hash(id, chatId, message, dateTimeSendNotification, person);
     }
 
     @Override
